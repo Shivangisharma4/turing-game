@@ -4,6 +4,10 @@
         {
             "source": "/api/(.*)",
             "destination": "/server/src/index.js"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
     ],
     "builds": [
