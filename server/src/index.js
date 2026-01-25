@@ -39,9 +39,12 @@ const startServer = async () => {
       console.log('⚠️  No MongoDB URI provided, running without database');
     }
 
-    app.listen(PORT, () => {
-      console.log(`🎮 Server running at http://localhost:${PORT}`);
-    });
+    // Only listen if not running in Vercel (Vercel handles the server)
+    if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+      app.listen(PORT, () => {
+        console.log(`🎮 Server running at http://localhost:${PORT}`);
+      });
+    }
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
@@ -49,3 +52,5 @@ const startServer = async () => {
 };
 
 startServer();
+
+export default app;
