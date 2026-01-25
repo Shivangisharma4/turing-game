@@ -11,7 +11,11 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*', // Allow all origins for initial deployment complexity reduction
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Routes
@@ -32,7 +36,7 @@ const startServer = async () => {
     } else {
       console.log('⚠️  No MongoDB URI provided, running without database');
     }
-    
+
     app.listen(PORT, () => {
       console.log(`🎮 Server running at http://localhost:${PORT}`);
     });
