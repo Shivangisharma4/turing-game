@@ -28,29 +28,29 @@ app.get('/api/health', (req, res) => {
 });
 
 // Connect to MongoDB and start server
-const startServer = async () => {
+// Connect to MongoDB
+const connectDB = async () => {
   try {
-    // User requested MONGO_DB_URL specifically
-    const mongoURI = process.env.MONGO_DB_URL;
-    if (mongoURI) {
-      await mongoose.connect(mongoURI);
+    if (process.env.MONGODB_URI) {
+      await mongoose.connect(process.env.MONGODB_URI);
       console.log('📦 Connected to MongoDB');
     } else {
       console.log('⚠️  No MongoDB URI provided, running without database');
     }
-
-    // Only listen if not running in Vercel (Vercel handles the server)
-    if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-      app.listen(PORT, () => {
-        console.log(`🎮 Server running at http://localhost:${PORT}`);
-      });
-    }
   } catch (error) {
-    console.error('Failed to start server:', error);
-    process.exit(1);
+    console.error('MongoDB connection error:', error);
   }
 };
 
-startServer();
+// Start server if not running in Vercel (Vercel handles the port integration)
+if (process.env.NODE_ENV !== 'production') {
+  connectDB();
+  app.listen(PORT, () => {
+    console.log(`🎮 Server running at http://localhost:${PORT}`);
+  });
+} else {
+  // In Vercel, just connect DB
+  connectDB();
+}
 
 export default app;
