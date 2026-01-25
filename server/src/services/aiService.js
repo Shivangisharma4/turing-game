@@ -77,12 +77,14 @@ IMPORTANT RULES:
  */
 export function calculateStressIncrease(npc, message) {
     const lowerMessage = message.toLowerCase();
-    let stressIncrease = 0;
+    // Base stress for being interrogated
+    let stressIncrease = 2;
 
     // Check for stress triggers
     for (const trigger of npc.stressTriggers) {
         if (lowerMessage.includes(trigger.toLowerCase())) {
             stressIncrease += 15;
+            console.log(`[Stress] Trigger hit: ${trigger}`);
         }
     }
 
@@ -95,6 +97,8 @@ export function calculateStressIncrease(npc, message) {
     if (lowerMessage.includes('please') || lowerMessage.includes('thank')) {
         stressIncrease -= 5;
     }
+
+    console.log(`[Stress] Message: "${message}" | Increase: ${stressIncrease}`);
 
     // Cap per-message increase
     return Math.max(-10, Math.min(stressIncrease, 25));

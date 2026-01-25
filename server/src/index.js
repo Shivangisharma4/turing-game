@@ -43,7 +43,7 @@ const connectDB = async () => {
 };
 
 // Start server if not running in Vercel (Vercel handles the port integration)
-if (process.env.NODE_ENV !== 'production') {
+if (!process.env.VERCEL) {
   connectDB();
   app.listen(PORT, () => {
     console.log(`🎮 Server running at http://localhost:${PORT}`);
