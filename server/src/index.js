@@ -30,8 +30,9 @@ app.get('/api/health', (req, res) => {
 // Connect to MongoDB and start server
 const startServer = async () => {
   try {
-    if (process.env.MONGODB_URI) {
-      await mongoose.connect(process.env.MONGODB_URI);
+    const mongoURI = process.env.MONGODB_URI || process.env.MONGO_DB_URL;
+    if (mongoURI) {
+      await mongoose.connect(mongoURI);
       console.log('📦 Connected to MongoDB');
     } else {
       console.log('⚠️  No MongoDB URI provided, running without database');
