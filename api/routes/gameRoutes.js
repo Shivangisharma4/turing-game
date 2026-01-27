@@ -78,6 +78,13 @@ router.post('/:sessionId/guess', async (req, res) => {
         const { sessionId } = req.params;
         const { npcId } = req.body;
 
+        const npc = getNPCById(npcId);
+        console.log('[DEBUG] Accusation:', { npcId, npc });
+
+        if (!npc) {
+            return res.status(400).json({ success: false, error: 'Invalid NPC ID' });
+        }
+
         let session = null;
         let resolvedImposterId = null;
 
