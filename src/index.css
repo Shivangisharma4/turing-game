@@ -549,9 +549,32 @@ body::before {
 /* Welcome screen */
 .welcome-screen {
   text-align: center;
-  padding: 80px 20px;
+  padding: 80px 20px 40px;
+  /* Reduced bottom padding */
   max-width: 700px;
   margin: 0 auto;
+  min-height: 100vh;
+  /* Fill full height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Center content vertically */
+}
+
+/* ... existing styles ... */
+
+.welcome-footer {
+  margin-top: auto;
+  /* Push to bottom */
+  padding-top: 40px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  opacity: 0.8;
 }
 
 .welcome-title {
@@ -622,6 +645,69 @@ body::before {
 .start-button:hover {
   transform: scale(1.03);
   box-shadow: var(--glow-cyan);
+}
+
+.welcome-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.welcome-footer {
+  margin-top: 120px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  opacity: 0.8;
+}
+
+.creator-link {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--neon-cyan);
+  transition: all 0.3s ease;
+  padding-bottom: 2px;
+}
+
+.creator-link:hover {
+  color: var(--neon-magenta);
+  border-color: var(--neon-magenta);
+  text-shadow: var(--glow-magenta);
+}
+
+.secondary-button {
+  background: transparent;
+  border: 1px solid var(--neon-cyan);
+  border-radius: 6px;
+  padding: 14px 45px;
+  color: var(--neon-cyan);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.secondary-button:hover {
+  background: rgba(0, 245, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
+  transform: translateY(-2px);
+  text-shadow: 0 0 8px var(--neon-cyan);
 }
 
 /* Accusation button */

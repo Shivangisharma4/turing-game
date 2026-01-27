@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Stars, OrbitControls } from '@react-three/drei';
-import { EffectComposer, Bloom, ChromaticAberration } from '@react-three/postprocessing';
+import { Float, Stars, OrbitControls, Environment, PresentationControls } from '@react-three/drei';
+import { EffectComposer, Bloom, ChromaticAberration, Noise, Vignette } from '@react-three/postprocessing';
 import {
   MagnifyingGlass,
   Target,
@@ -198,9 +198,47 @@ function Scene3D({ npcs, selectedNPC, isSpeaking, onSelectNPC }) {
   );
 }
 
+// How to Play Modal
+function HowToPlayModal({ onClose }) {
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px' }}>
+        <h2 className="modal-title">
+          <MagnifyingGlass size={24} weight="fill" style={{ marginRight: '10px' }} />
+          Mission Briefing
+        </h2>
+
+        <div className="how-to-play-content" style={{ textAlign: 'left', margin: '20px 0', lineHeight: '1.6', color: '#8899ac' }}>
+          <p style={{ marginBottom: '15px' }}>
+            <strong style={{ color: '#00f5ff' }}>OBJECTIVE:</strong><br />
+            Identify the rogue AI hiding among 5 human suspects. The AI has perfectly copied a human identity, but it has flaws.
+          </p>
+
+          <p style={{ marginBottom: '15px' }}>
+            <strong style={{ color: '#ff00ff' }}>MECHANICS:</strong><br />
+            • <strong>Interrogate:</strong> Chat with suspects to find inconsistencies in their stories.<br />
+            • <strong>Stress Levels:</strong> Pressuring suspects raises their stress. The AI becomes "glitchy" and defensive at high stress.<br />
+            • <strong>Hidden Clues:</strong> Each character has secrets. Use the right keywords to unlock them.
+          </p>
+
+          <p>
+            <strong style={{ color: '#ffaa00' }}>WINNING:</strong><br />
+            Once you are confident, click the <strong>Target Icon</strong> to make an accusation. Be careful—you only get one shot!
+          </p>
+        </div>
+
+        <button className="modal-button confirm" onClick={onClose}>
+          Understood
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // Welcome Screen
 function WelcomeScreen({ onStart }) {
   const [name, setName] = useState('');
+  const [showGuide, setShowGuide] = useState(false);
 
   return (
     <div className="welcome-screen">
@@ -210,19 +248,38 @@ function WelcomeScreen({ onStart }) {
         An advanced AI has gone rogue, perfectly mimicking a human identity.
         Your mission: interrogate the suspects and uncover the imposter.
       </p>
-      <input
-        type="text"
-        className="welcome-input"
-        placeholder="Enter your codename..."
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        onKeyPress={(e) => e.key === 'Enter' && onStart(name || 'Detective')}
-      />
-      <br />
-      <button className="start-button" onClick={() => onStart(name || 'Detective')}>
-        <MagnifyingGlass size={20} weight="bold" />
-        Begin Investigation
-      </button>
+
+      <div className="welcome-actions">
+        <input
+          type="text"
+          className="welcome-input"
+          placeholder="Enter your codename..."
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && onStart(name || 'Detective')}
+        />
+
+        <button className="start-button" onClick={() => onStart(name || 'Detective')}>
+          <MagnifyingGlass size={20} weight="bold" />
+          Begin Investigation
+        </button>
+
+        <button
+          className="secondary-button"
+          onClick={() => setShowGuide(true)}
+        >
+          How to Play
+        </button>
+      </div>
+
+      {showGuide && <HowToPlayModal onClose={() => setShowGuide(false)} />}
+
+      <div className="welcome-footer">
+        <p>&copy; {new Date().getFullYear()} All rights reserved</p>
+        <p>
+          Made with ❤️ by <a href="https://x.com/shivangitwt" target="_blank" rel="noopener noreferrer" className="creator-link">Shivangi</a>
+        </p>
+      </div>
     </div>
   );
 }
@@ -343,7 +400,7 @@ function App() {
       }
     } catch (error) {
       console.error('Failed to start game:', error);
-      alert('Failed to connect to server');
+      alert(`Connection Error: ${error.message}. Please refresh and try again. If this persists, the server might be restarting.`);
     }
   };
 

@@ -64,10 +64,37 @@ IMPORTANT RULES:
         };
     } catch (error) {
         console.error('AI Service Error:', error);
+        console.error('AI Service Error:', error);
+
+        // Fallback responses if AI is offline/rate-limited
+        const fallbacks = {
+            low: [
+                "I... I don't recall that detail.",
+                "Can we discuss something else?",
+                "I'm a bit busy right now, detective."
+            ],
+            medium: [
+                "Why are you asking me this?",
+                "I have nothing to say to you.",
+                "You're making me nervous."
+            ],
+            high: [
+                "Leave me alone!",
+                "I won't say another word!",
+                "Get out of here!"
+            ]
+        };
+
+        let context = 'low';
+        if (stressLevel >= npc.stressThreshold) context = 'high';
+        else if (stressLevel >= npc.stressThreshold * 0.6) context = 'medium';
+
+        const randomResponse = fallbacks[context][Math.floor(Math.random() * fallbacks[context].length)];
+
         return {
-            success: false,
-            response: `*${npc.name} seems distracted and doesn't respond*`,
-            error: error.message
+            success: true, // Return success so the UI displays it
+            response: `(Connection unstable) ${randomResponse}`,
+            stressLevel: stressLevel
         };
     }
 }
