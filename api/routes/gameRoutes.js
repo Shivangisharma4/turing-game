@@ -39,21 +39,21 @@ router.post('/start', async (req, res) => {
 
         // ... (DB save logic remains same)
 
-        const isDbConnected = false; // FORCE DISABLED FOR DEBUGGING
-        /*
+        const isDbConnected = mongoose.connection.readyState === 1;
+
         if (isDbConnected) {
             try {
                 const session = new GameSession(sessionData);
                 await session.save();
+                console.log('Session saved to DB');
             } catch (dbError) {
-                console.log('DB Save failed, falling back to in-memory');
+                console.log('DB Save failed, falling back to in-memory', dbError);
                 inMemorySessions.set(sessionId, sessionData);
             }
         } else {
             console.log('DB not connected, using in-memory storage');
             inMemorySessions.set(sessionId, sessionData);
         }
-        */
         // Always use in-memory/stateless fallback for now
         inMemorySessions.set(sessionId, sessionData);
 
@@ -65,15 +65,24 @@ router.post('/start', async (req, res) => {
                 id, name, role, portrait, location
             }))
         });
-        // ...
-        // In router.post('/:sessionId/guess' ...
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+/**
+ * Make an accusation/guess
+ */
+router.post('/:sessionId/guess', async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+        const { npcId } = req.body;
 
         let session = null;
         let resolvedImposterId = null;
 
         // 1. Try DB
-        // FORCE DISABLED FOR DEBUGGING
-        if (false && mongoose.connection.readyState === 1) {
+        if (mongoose.connection.readyState === 1) {
             session = await GameSession.findOne({ sessionId });
         }
 
@@ -112,14 +121,12 @@ router.post('/start', async (req, res) => {
         const gameStatus = isCorrect ? 'won' : 'lost';
 
         // Update session if it real exists
-        /*
         if (session._id && mongoose.connection.readyState === 1) {
             await GameSession.updateOne(
                 { sessionId },
                 { gameStatus, finalGuess: npcId, endedAt: new Date() }
             );
         }
-        */
 
         const REVELATIONS = {
             librarian: {

@@ -64,7 +64,7 @@ IMPORTANT RULES:
         };
     } catch (error) {
         console.error('AI Service Error:', error);
-        console.error('AI Service Error:', error);
+
 
         // Fallback responses if AI is offline/rate-limited
         const fallbacks = {
