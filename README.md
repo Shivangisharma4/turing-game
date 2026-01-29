@@ -1,4 +1,4 @@
-# The Turing Mystery 🕵️
+# The Turing Mysteryyyy 🕵️
 
 An AI-powered detective game where you interrogate NPCs to discover which one is a malfunctioning AI. Each NPC has unique personalities, hidden knowledge, and stress responses - all powered by Google's Gemini AI.
 
