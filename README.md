@@ -33,7 +33,7 @@ cd ../client && npm install
 ```
 
 2. **Configure environment**
-```bash
+```bash 
 cd server
 cp .env.example .env
 # Edit .env and add your GEMINI_API_KEY
@@ -83,7 +83,7 @@ turing-mystery/
 
 - Be polite to keep stress levels low
 - Ask specific questions about inconsistencies
-- Watch for NPCs who can't describe sensory experiences
+- Watch for NPCs who cann't describe sensory experiences
 - Pay attention to repeated phrases or strange behaviors
 - Everyone knows something - find out what
 
